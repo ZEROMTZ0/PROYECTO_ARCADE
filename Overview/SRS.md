@@ -1,142 +1,273 @@
 ### SRS
-# Sistema Arcade con ESP32
-## 1. Introducción
-### 1.1 Propósito
+# Sistema Arcade Embebido con ESP32
+## 1. Introduction
 
-El presente documento define los requerimientos funcionales y no funcionales del sistema Arcade basado en ESP32. Este documento servirá como referencia para el desarrollo, validación y pruebas del sistema embebido.
+### 1.1 Purpose
 
-### 1.2 Alcance del Sistema
+El propósito de este documento es establecer formalmente los requerimientos del Sistema Arcade Embebido basado en ESP32
 
-El sistema Arcade con ESP32 permitirá la interacción del usuario mediante joystick y botones físicos para controlar un videojuego ejecutado en un microcontrolador. El sistema mostrará la interfaz gráfica en una pantalla integrada y responderá en tiempo real a las entradas del usuario.
+Este documento define los requerimientos funcionales, no funcionales, de interfaz, de tiempo real y de seguridad necesarios para el diseño, implementación, integración y validación del sistema
 
-### 1.3 Definiciones
+Sirve como referencia técnica para el equipo de desarrollo y como base para futuras actividades de prueba y mantenimiento
 
-ESP32: Microcontrolador principal del sistema.
+### 1.2 Scope
 
-Joystick: Dispositivo analógico para control de movimiento.
+El sistema consiste en una consola arcade embebida desarrollada sobre un microcontrolador ESP32.
 
-Botones: Entradas digitales para acciones del juego.
+El problema que se busca resolver es la implementación de una plataforma interactiva capaz de ejecutar videojuegos simples utilizando recursos limitados de hardware, garantizando respuesta en tiempo real y estabilidad operativa
 
-PCB: Placa de circuito impreso diseñada para integrar el hardware.
+El sistema permitirá:
 
-## 2. Descripción General del Sistema
-### 2.1 Perspectiva del Producto
+- Detectar entradas físicas mediante botones y joystick
 
-El sistema es un dispositivo autónomo embebido que integra:
+- Procesar dichas entradas en tiempo real
 
-Módulo de entrada (Joystick + Botones)
+- Renderizar gráficos en una pantalla integrada
 
-Módulo de procesamiento (ESP32)
+- Ejecutar al menos un videojuego funcional
 
-Módulo de salida (Pantalla)
+- Operar de manera independiente sin conexión a sistemas externos
 
-Módulo de alimentación
+### 1.3 Definitions, Acronyms, and Abbreviations
 
-Arquitectura general:
+- ESP32 – Microcontrolador 
+- GPIO – General Purpose Input/Output 
+- SPI – Serial Peripheral Interface
+- I2C – Inter-Integrated Circuit
+- UART – Universal Asynchronous Receiver-Transmitter
+- SRS – Software Requirements Specification
+- FR – Functional Requirement (Requerimiento Funcional)
+- NFR – Non-Functional Requirement (Requerimiento No Funcional)
+- RTOS – Real-Time Operating System
 
-Entradas → Procesamiento (ESP32) → Renderizado en pantalla
+### 1.4 References
 
-### 2.2 Funciones del Sistema
+- Hoja de datos oficial del ESP32
 
-Lectura de entradas digitales y analógicas
+- Plantilla del Proyecto de Sistemas Embebidos – GitHub
 
-Procesamiento de lógica del videojuego
+- Documentación del framework Arduino / ESP-IDF
 
-Renderizado gráfico en pantalla
+- Datasheet del módulo de pantalla utilizado TFT
 
-Gestión de energía
+- Documentación técnica de los protocolos SPI e I2C
 
-Control de estados del juego
+### 1.5 Document Overview
 
-## 3. Requerimientos Funcionales
-RF-01
+Este documento se organiza de la siguiente manera:
 
-El sistema deberá encenderse mediante un botón físico de encendido.
+- La Sección 1 presenta el propósito, alcance y referencias del sistema
 
-RF-02
+- La Sección 2 describe la visión general del producto
 
-El sistema deberá leer las posiciones del joystick mediante entradas analógicas del ESP32.
+- La Sección 3 detalla los requerimientos específicos del sistema
 
-RF-03
+- Las Secciones 4 y 5 corresponderán a verificación y trazabilidad
+- La Sección 6 detalla los roles de equipo
 
-El sistema deberá detectar la presión de botones digitales en tiempo real.
+## 2. Overall Description
+### 2.1 Product Perspective
 
-RF-04
+El sistema es un producto independiente que no forma parte de un sistema mayor
 
-El sistema deberá ejecutar la lógica del videojuego según las entradas del usuario.
+Está compuesto por:
 
-RF-05
+- Microcontrolador ESP32
 
-El sistema deberá actualizar la pantalla con una tasa mínima de 20 FPS.
+- Pantalla basica 
 
-RF-06
+- Botones de acción
 
-El sistema deberá incluir un menú inicial antes de comenzar el juego.
+- vJoystick direccional
 
-RF-07
+- Sistema de alimentación
 
-El sistema deberá reiniciar la partida cuando el usuario presione el botón de reinicio.
+El sistema opera de manera autónoma y no depende de conexión a internet ni servicios externos
 
-RF-08
+### 2.2 Product Functions
 
-El sistema deberá mostrar puntuación en pantalla.
+Las funciones principales del sistema incluyen:
 
-## 4. Requerimientos No Funcionales
-RNF-01 (Rendimiento)
+- Encendido y apagado mediante botón físico
 
-El sistema deberá responder a entradas del usuario en un tiempo menor a 100 ms.
+- Detección de múltiples botones de acción
 
-RNF-02 (Estabilidad)
+- Detección de dirección del joystick
 
-El sistema deberá operar sin reinicios inesperados durante al menos 30 minutos continuos.
+- Procesamiento en tiempo real de las entradas
 
-RNF-03 (Consumo Energético)
+- Visualización gráfica en pantalla
 
-El sistema deberá operar con batería durante al menos 1 hora continua.
+- Ejecución de al menos un videojuego (emulado)
 
-RNF-04 (Usabilidad)
+### 2.3 User Characteristics
 
-La interfaz deberá ser intuitiva y clara para el usuario.
+El sistema está dirigido a usuarios generales sin necesidad de conocimientos técnicos avanzados
 
-RNF-05 (Portabilidad)
+Características del usuario:
 
-El sistema deberá estar contenido en una estructura compacta tipo arcade portátil.
+- Familiaridad básica con videojuegos
 
-RNF-06 (Mantenibilidad)
+- Capacidad de interactuar mediante botones y palanca
 
-El código deberá estar modularizado y documentado.
+- No requiere configuración técnica previa
 
-## 5. Restricciones del Sistema
+### 2.4 Constraints
 
-- El sistema debe utilizar ESP32 como microcontrolador principal.
+El sistema presenta las siguientes restricciones:
 
-- El desarrollo deberá realizarse en Arduino IDE o PlatformIO.
+- Memoria RAM limitada del ESP32
 
-- La pantalla deberá ser compatible con el ESP32.
+- Capacidad de procesamiento limitada
 
-- El sistema debe funcionar con alimentación de 3.3V o 5V según diseño.
+- Número limitado de pines GPIO
 
-## 6. Consideraciones de Seguridad
+- Restricciones energéticas
 
-- No debe existir exposición de cables energizados.
+- Restricciones de costo propias de un proyecto académico.
 
-- La batería debe contar con protección contra sobrecarga.
+- Tiempo limitado de desarrollo
 
-- El sistema debe evitar sobrecalentamiento.
+### 2.5 Assumptions and Dependencies
 
-## 7. Criterios de Aceptación
+#### Suposiciones:
 
-- El sistema será considerado funcional cuando:
+- El hardware funcionará correctamente
 
-- Todos los RF estén implementados.
+- La pantalla es compatible con SPI o I2C
 
-- Se realicen pruebas exitosas de funcionamiento continuo.
+- El joystick y botones están correctamente conectados
 
-- La pantalla responda correctamente a las entradas.
+- El sistema será programado en C/C++
 
-- El sistema no presente fallas eléctricas ni reinicios inesperados.
+#### Dependencias:
 
-## 8. Roles del Equipo
+- Librerías del ESP32
+
+- Librerías de control de pantalla
+
+- Framework Arduino o ESP-IDF
+
+- Datasheets oficiales del hardware
+
+## 3. Specific Requirements
+### 3.1 Functional Requirements
+
+FR-01: El sistema deberá encender y apagar mediante un botón físico dedicado
+
+FR-02: El sistema deberá detectar correctamente la presión de múltiples botones de acción
+
+FR-03: El sistema deberá detectar las direcciones del joystick (arriba, abajo, izquierda, derecha)
+
+FR-04: El sistema deberá procesar las entradas del usuario con una latencia menor a 100 ms
+
+FR-05: El sistema deberá renderizar gráficos en una pantalla integrada.
+FR-06: El sistema deberá ejecutar al menos un videojuego completamente funcional
+
+FR-07: El sistema deberá permitir reiniciar el juego sin reiniciar el hardware
+
+FR-08: El sistema deberá mantener estabilidad durante sesiones prolongadas
+
+FR-09: El sistema deberá iniciar automáticamente el menú principal al encenderse
+
+### 3.2 Non-Functional Requirements
+
+NFR-01: El tiempo máximo de respuesta ante una entrada del usuario no deberá superar 100 ms
+
+NFR-02: El consumo máximo de energía deberá ser compatible con alimentación USB estándar (5V)
+
+NFR-03: El sistema deberá operar de manera estable durante al menos 30 minutos continuos sin fallos
+
+NFR-04: El firmware deberá estar estructurado de manera modular
+
+NFR-05: El código deberá permitir mantenimiento y expansión futura
+
+### 3.3 External Interface Requirements
+### 3.3.1 User Interfaces
+
+- Pantalla gráfica TFT
+
+- Botones físicos de acción
+
+- Joystick direccional
+
+- Indicadores LED (si se implementan)
+
+### 3.3.2 Hardware Interfaces
+
+- GPIO digitales para botones
+
+- GPIO analógicos o digitales para joystick
+
+- Comunicación SPI o I2C para pantalla
+
+- Puerto USB para alimentación y programación
+
+- UART para depuración
+
+### 3.3.3 Software Interfaces
+
+- Librerías del ESP32
+
+- Librerías gráficas para pantalla
+
+- Framework Arduino o ESP-IDF
+
+- Herramientas de compilación y carga de firmware
+
+### 3.4 Real-Time Requirements
+
+- El sistema deberá procesar entradas físicas con una latencia máxima de 100 ms
+
+- La actualización gráfica deberá realizarse a una frecuencia suficiente para evitar parpadeo perceptible
+
+- El procesamiento del juego no deberá bloquear la detección de entradas
+
+### 3.5 Safety and Regulatory Requirements
+
+Dado que se trata de un proyecto académico, no se aplican normativas industriales obligatorias
+
+- Sin embargo, se deberán considerar:
+
+- Uso correcto de niveles de voltaje (3.3V)
+
+- Protección básica contra cortocircuitos
+
+- Conexiones seguras y aisladas
+
+- Buenas prácticas de manejo eléctrico
+
+## 4. Verification and Validation
+
+NOT FOR THIS RELEASE
+
+Esta sección se desarrollará en una futura versión del documento e incluirá:
+
+- Casos de prueba para cada FR
+
+- Pruebas de rendimiento
+
+- Validación de latencia
+
+- Pruebas de estabilidad
+
+- Inspección de código y arquitectura
+
+## 5. Requirements Traceability Matrix
+
+NOT FOR THIS RELEASE
+
+En futuras versiones se incluirá una matriz que relacione:
+
+- Cada requerimiento funcional y no funcional
+
+- Su método de verificación
+
+- Su resultado esperado
+
+- Evidencia de cumplimiento
+
+## 6. Roles del Equipo
 - Ensamblaje: ARMANDO
 
 - Electrónica: Ana, ARMANDO
