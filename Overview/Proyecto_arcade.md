@@ -111,3 +111,6 @@ En dicha sección se describen:
 - Consideraciones energéticas
 
 - Diseño preliminar de la PCB
+
+
+# --> [SRS](https://github.com/ZEROMTZ0/PROYECTO_ARCADE/blob/main/Overview/SRS.md)
